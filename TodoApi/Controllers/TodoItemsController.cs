@@ -20,7 +20,6 @@ public class TodoItemsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/TodoItems
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItemDTO>>> GetTodoItems()
     {
@@ -29,8 +28,6 @@ public class TodoItemsController : ControllerBase
             .ToListAsync();
     }
 
-    // GET: api/TodoItems/5
-    // <snippet_GetByID>
     [HttpGet("{id}")]
     public async Task<ActionResult<TodoItemDTO>> GetTodoItem(long id)
     {
@@ -43,11 +40,7 @@ public class TodoItemsController : ControllerBase
 
         return ItemToDTO(todoItem);
     }
-    // </snippet_GetByID>
 
-    // PUT: api/TodoItems/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    // <snippet_Update>
     [HttpPut("{id}")]
     public async Task<IActionResult> PutTodoItem(long id, TodoItemDTO todoDTO)
     {
@@ -76,11 +69,7 @@ public class TodoItemsController : ControllerBase
 
         return NoContent();
     }
-    // </snippet_Update>
 
-    // POST: api/TodoItems
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    // <snippet_Create>
     [HttpPost]
     public async Task<ActionResult<TodoItemDTO>> PostTodoItem(TodoItemDTO todoDTO)
     {
@@ -98,9 +87,7 @@ public class TodoItemsController : ControllerBase
             new { id = todoItem.Id },
             ItemToDTO(todoItem));
     }
-    // </snippet_Create>
 
-    // DELETE: api/TodoItems/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTodoItem(long id)
     {
