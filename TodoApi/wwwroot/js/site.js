@@ -1,14 +1,19 @@
 ﻿const uri = 'api/todoitems';
 let todos = [];
 
-function getItems() {
-    fetch(uri)
-        .then(response => response.json())
-        .then(data => _displayItems(data))
-        .catch(error => console.error('Unable to get items.', error));
+// Get items from the API
+async function getItems() {
+    try {
+        const res = await fetch(uri);
+        const data = await res.json();
+        _displayItems(data);
+    } catch (error) {
+        console.error('Unable to get items.', error);
+    }
 }
 
-function addItem() {
+// Add new item
+async function addItem() {
     const addNameTextbox = document.getElementById('add-name');
 
     const item = {
@@ -16,30 +21,34 @@ function addItem() {
         name: addNameTextbox.value.trim()
     };
 
-    fetch(uri, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(item)
-    })
-        .then(response => response.json())
-        .then(() => {
-            getItems();
-            addNameTextbox.value = '';
-        })
-        .catch(error => console.error('Unable to add item.', error));
+    try {
+        const res = await fetch(uri, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        });
+        await res.json();
+        getItems();
+        addNameTextbox.value = '';
+    } catch (error) {
+        console.error('Unable to add item.', error);
+    }
 }
 
-function deleteItem(id) {
-    fetch(`${uri}/${id}`, {
-        method: 'DELETE'
-    })
-        .then(() => getItems())
-        .catch(error => console.error('Unable to delete item.', error));
+// Delete item
+async function deleteItem(id) {
+    try {
+        await fetch(`${uri}/${id}`, { method: 'DELETE' });
+        getItems();
+    } catch (error) {
+        console.error('Unable to delete item.', error);
+    }
 }
 
+// Display the edit form
 function displayEditForm(id) {
     const item = todos.find(item => item.id === id);
 
@@ -49,7 +58,8 @@ function displayEditForm(id) {
     document.getElementById('editForm').style.display = 'block';
 }
 
-function updateItem() {
+// Update item
+async function updateItem() {
     const itemId = document.getElementById('edit-id').value;
     const item = {
         id: parseInt(itemId, 10),
@@ -57,32 +67,36 @@ function updateItem() {
         name: document.getElementById('edit-name').value.trim()
     };
 
-    fetch(`${uri}/${itemId}`, {
-        method: 'PUT',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(item)
-    })
-        .then(() => getItems())
-        .catch(error => console.error('Unable to update item.', error));
+    try {
+        await fetch(`${uri}/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        });
+        getItems();
+    } catch (error) {
+        console.error('Unable to update item.', error);
+    }
 
     closeInput();
-
     return false;
 }
 
+// Close the edit form
 function closeInput() {
     document.getElementById('editForm').style.display = 'none';
 }
 
+// Update the count of to-do items
 function _displayCount(itemCount) {
     const name = (itemCount === 1) ? 'to-do' : 'to-dos';
-
     document.getElementById('counter').innerText = `${itemCount} ${name}`;
 }
 
+// Display the list of to-do items
 function _displayItems(data) {
     const tBody = document.getElementById('todos');
     tBody.innerHTML = '';
