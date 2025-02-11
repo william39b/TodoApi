@@ -57,6 +57,7 @@ public class TodoItemsController : ControllerBase
 
         todoItem.Name = todoDTO.Name;
         todoItem.IsComplete = todoDTO.IsComplete;
+        todoItem.Deadline = string.IsNullOrEmpty(todoDTO.Deadline) ? (TimeSpan?)null : TimeSpan.Parse(todoDTO.Deadline);
 
         try
         {
@@ -76,7 +77,8 @@ public class TodoItemsController : ControllerBase
         var todoItem = new TodoItem
         {
             IsComplete = todoDTO.IsComplete,
-            Name = todoDTO.Name
+            Name = todoDTO.Name,
+            Deadline = string.IsNullOrEmpty(todoDTO.Deadline) ? (TimeSpan?)null : TimeSpan.Parse(todoDTO.Deadline)
         };
 
         _context.TodoItems.Add(todoItem);
@@ -113,6 +115,7 @@ public class TodoItemsController : ControllerBase
        {
            Id = todoItem.Id,
            Name = todoItem.Name,
-           IsComplete = todoItem.IsComplete
+           IsComplete = todoItem.IsComplete,
+           Deadline = todoItem.Deadline?.ToString(@"hh\:mm"), // Convert TimeSpan? to string (hh:mm format)
        };
 }
