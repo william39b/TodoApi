@@ -1,7 +1,6 @@
 ﻿const uri = 'api/todoitems';
 let todos = [];
 
-// Get items from the API
 async function getItems() {
     try {
         const res = await fetch(uri);
@@ -12,13 +11,14 @@ async function getItems() {
     }
 }
 
-// Add new item
 async function addItem() {
     const addNameTextbox = document.getElementById('add-name');
+    const addDeadlineTextbox = document.getElementById('add-deadline');
 
     const item = {
         isComplete: false,
-        name: addNameTextbox.value.trim()
+        name: addNameTextbox.value.trim(),
+        deadline: addDeadlineTextbox.value.trim() || null,
     };
 
     try {
@@ -33,12 +33,12 @@ async function addItem() {
         await res.json();
         getItems();
         addNameTextbox.value = '';
+        addDeadlineTextbox.value = '';
     } catch (error) {
         console.error('Unable to add item.', error);
     }
 }
 
-// Delete item
 async function deleteItem(id) {
     try {
         await fetch(`${uri}/${id}`, { method: 'DELETE' });
@@ -48,25 +48,25 @@ async function deleteItem(id) {
     }
 }
 
-// Display the edit form
 function displayEditForm(id) {
     const item = todos.find(item => item.id === id);
 
     document.getElementById('edit-name').value = item.name;
     document.getElementById('edit-id').value = item.id;
     document.getElementById('edit-isComplete').checked = item.isComplete;
+    document.getElementById('edit-deadline').value = item.deadline || '';
     document.getElementById('editForm').style.display = 'block';
 }
 
-// Update item
 async function updateItem() {
     const itemId = document.getElementById('edit-id').value;
     const item = {
         id: parseInt(itemId, 10),
         isComplete: document.getElementById('edit-isComplete').checked,
-        name: document.getElementById('edit-name').value.trim()
+        name: document.getElementById('edit-name').value.trim(),
+        deadline: document.getElementById('edit-deadline').value.trim() || undefined
     };
-
+    
     try {
         await fetch(`${uri}/${itemId}`, {
             method: 'PUT',
@@ -129,10 +129,17 @@ function _displayItems(data) {
         td2.appendChild(textNode);
 
         let td3 = tr.insertCell(2);
-        td3.appendChild(editButton);
+        if (item.deadline) {
+            td3.appendChild(document.createTextNode(item.deadline));
+        } else {
+            td3.appendChild(document.createTextNode(''));
+        }
 
         let td4 = tr.insertCell(3);
-        td4.appendChild(deleteButton);
+        td4.appendChild(editButton);
+
+        let td5 = tr.insertCell(4);
+        td5.appendChild(deleteButton);
     });
 
     todos = data;
