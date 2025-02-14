@@ -66,7 +66,7 @@ async function updateItem() {
         name: document.getElementById('edit-name').value.trim(),
         deadline: document.getElementById('edit-deadline').value.trim() || undefined
     };
-    
+
     try {
         await fetch(`${uri}/${itemId}`, {
             method: 'PUT',
@@ -92,7 +92,7 @@ function closeInput() {
 
 // Update the count of to-do items
 function _displayCount(itemCount) {
-    const name = (itemCount === 1) ? 'to-do' : 'to-dos';
+    const name = (itemCount === 1) ? 'Task' : 'Tasks';
     document.getElementById('counter').innerText = `${itemCount} ${name}`;
 }
 
