@@ -1,45 +1,70 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-do APP</title>
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-    <h1>To-do APP</h1>
-    <h3>Add new task</h3>
-    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
-        <input type="text" id="add-name" placeholder="New to-do">
-        <input type="time" id="add-deadline"> 
-        <input type="submit" value="Add">
-    </form>
+    <div class="container">
+        <header>
+            <h1>To-do APP</h1>
+            <h3>Add New Task</h3>
+        </header>
 
-    <div id="editForm">
-        <h3>Edit</h3>
-        <form action="javascript:void(0);" onsubmit="updateItem()">
-            <input type="hidden" id="edit-id">
-            <input type="checkbox" id="edit-isComplete">
-            <input type="text" id="edit-name">
-            <input type="time" id="edit-deadline">
-            <input type="submit" value="Save">
-            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        <!-- Add Task Form -->
+        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+            <div class="form-group">
+                <input type="text" id="add-name" placeholder="New task name" required>
+            </div>
+            <div class="form-group">
+                <input type="time" id="add-deadline">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Task">
+            </div>
         </form>
+
+        <!-- Edit Task Form -->
+        <div id="editForm" class="modal">
+            <div class="modal-content">
+                <h3>Edit Task</h3>
+                <form action="javascript:void(0);" onsubmit="updateItem()">
+                    <input type="hidden" id="edit-id">
+                    <label for="edit-isComplete">Complete:</label>
+                    <input type="checkbox" id="edit-isComplete">
+                    <label for="edit-name">Name:</label>
+                    <input type="text" id="edit-name" required>
+                    <label for="edit-deadline">Deadline:</label>
+                    <input type="time" id="edit-deadline">
+                    <div class="form-group">
+                        <input type="submit" value="Save">
+                        <a onclick="closeInput()" aria-label="Close" class="close-btn">×</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Task Counter -->
+        <p id="counter"></p>
+
+        <!-- Task List Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Complete</th>
+                    <th>Name</th>
+                    <th>Deadline</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="todos"></tbody>
+        </table>
     </div>
 
-    <p id="counter"></p>
-
-    <table>
-        <tr>
-            <th>Is Complete?</th>
-            <th>Name</th>
-            <th>Time</th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tbody id="todos"></tbody>
-    </table>
-
-    <script src="js/site.js" asp-append-version="true"></script>
+    <script src="js/site.js"></script>
     <script type="text/javascript">
         getItems();
     </script>
