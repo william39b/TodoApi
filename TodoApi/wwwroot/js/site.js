@@ -92,7 +92,7 @@ function closeInput() {
 
 // Update the count of to-do items
 function _displayCount(itemCount) {
-    const name = (itemCount === 1) ? 'Task' : 'Tasks';
+    const name = (itemCount === 1) ? 'to-do' : 'to-dos';
     document.getElementById('counter').innerText = `${itemCount} ${name}`;
 }
 
